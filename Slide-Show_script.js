@@ -1,18 +1,19 @@
 // Массив url для перехода
 var urls = [];
   
-  for (let i = 1; i != 194; i++) {
-    urls.push("img/и" + i + ".jpg")
-  }
+for (let i = 1; i != 194; i++) {
+  urls.push("img/и" + i + ".jpg")
+}
 
 // Переход по ссылкам
 function openUrl(url) {
   window.open(url, "_blank");
 }
 
+let aud = new Audio("music/background_Music.mp3")
 function start() {
   document.getElementById("button_id").hidden=true 
-  new Audio("music/background_Music.mp3").play()
+  aud.play()
   add_images()
 }
 
@@ -39,7 +40,7 @@ function add_images() {
   }
 
   setInterval(changeImage, 300);
-  }
+}
 
   document.addEventListener("DOMContentLoaded", function () {
     let button = document.getElementById("button_id")
