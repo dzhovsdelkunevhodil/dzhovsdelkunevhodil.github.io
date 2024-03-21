@@ -10,11 +10,10 @@ function openUrl(url) {
   window.open(url, "_blank");
 }
 
-let aud = new Audio("music/background_Music.mp3")
 function start() {
   document.getElementById("button_id").hidden=true 
+  new Audio("music/background_Music.mp3").play()
   add_images()
-  aud.play()
 }
 
 function add_images() {
