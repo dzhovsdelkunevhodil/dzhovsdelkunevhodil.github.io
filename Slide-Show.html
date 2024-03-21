@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Слайд-шоу</title>
+  <style>
+    img {
+      width: 700px;
+      height: auto;
+      
+    }
+    body{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url('back/back.jpg');
+    }
+    
+    #button_id{
+      background-color: black;
+      background-size: cover;
+      background-position: center;
+      width: 200px;
+      height: 50px;
+      border-radius: 25px;
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      line-height: 50 px;
+    }
+    #button_id:hover{
+      opacity: 0.8;
+      cursor: pointer;
+    }
+  </style>
+  <script src="Slide-Show_script.js"></script>
+</head>
+<body>
+  <!-- Слайд-шоу -->
+  <div id="img_container">
+  </div>
+ 
+  <button id="button_id">Воспроизведение воспоминаний</button>
+</body>
+</html>
