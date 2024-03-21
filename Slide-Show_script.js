@@ -13,8 +13,8 @@ function openUrl(url) {
 let aud = new Audio("music/background_Music.mp3")
 function start() {
   document.getElementById("button_id").hidden=true 
-  aud.play()
   add_images()
+  aud.play()
 }
 
 function add_images() {
