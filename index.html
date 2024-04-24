@@ -1,47 +1,385 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Слайд-шоу</title>
-  <style>
-    img {
-      width: 700px;
-      height: auto;
+    <meta charset="utf-8">
+    <title>Cinememory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('back/back.jpg');
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        nav button {
+            margin: 0 10px;
+            padding: 5px 15px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        nav button:hover {
+            opacity: 0.8;
+        }
+
+        #button_id {
+            background-color: black;
+            background-size: cover;
+            width: 200px;
+            height: 60px;
+            border-radius: 25px;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            /* line-height: 50px; */
+            margin-top: 20px;
+        }
+
+        #button_id span {
+            display: block;
+            height: 100%;
+        }
+
+        #button_id:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+        h2 {
+            font-size: 35px;
+        }
+
+        #info {
+            color: white;
+            margin-top: 20px;
+            font-size:medium;
+            font-size: 17px;
+        }
+
+        #img_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 900px;
+            height: auto;
+            margin: 10px
+        }
+
+        #img_container img {
+            margin: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 1200px) {
+            #img_container img {
+                max-width: 600px;
+            }
+            #info {
+                font-size: 15px;
+            }
+            .description {
+                max-width: 600px;
+            }
+            .contacts {
+                max-width: 600px;
+            }
+            h2 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            #img_container img {
+                max-width: 400px;
+            }
+            #info {
+                font-size: 15px;
+            }
+            .description {
+                max-width: 500px;
+            }
+            .contacts {
+                max-width: 450px;
+            }
+            h2 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            #img_container img {
+                max-width: 300px;
+            }
+            #info {
+                font-size: 14px;
+            }
+            .description {
+                max-width: 450px;
+            }
+            .contacts {
+                max-width: 430px;
+            }
+            h2 {
+                font-size: 30px;
+            }
+        }
+
+        .disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1001;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .required::after{
+          content : "*";
+          color: red;
+          margin-left: 5px;
+        }
+        .required{
+          color:red;
+        }
+        .required-info{
+
+        color: gray;
+        margin-left: 5px;
+        }
       
-    }
-    body{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-image: url('back/back.jpg');
-    }
-    
-    #button_id{
-      background-color: black;
-      background-size: cover;
-      background-position: center;
-      width: 200px;
-      height: 50px;
-      border-radius: 25px;
-      color: white;
-      font-size: 18px;
-      text-align: center;
-      line-height: 50 px;
-    }
-    #button_id:hover{
-      opacity: 0.8;
-      cursor: pointer;
-    }
-  </style>
-  <script src="Slide-Show_script.js"></script>
+        .slider-controls { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 1002; 
+        } 
+
+        .slider-btn { 
+            background-color: rgba(0, 0, 0, 0.7); 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 39px; 
+            height: 39px; 
+            font-size: 20px; 
+            cursor: pointer; 
+            margin: 0 15px; 
+            transition: background-color 0.3s; 
+        } 
+
+        .slider-btn:hover { 
+            background-color: rgba(255, 255, 255, 0.1); 
+        } 
+        
+        .prev-btn::before { 
+            content: '«'; 
+        } 
+        
+        .next-btn::before { 
+            content: '»'; 
+        } 
+        
+        
+        .custom-form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .form-group label {
+            color: #fff;
+            font-size: 18px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-primary {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+        
+        .description {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 700px;
+            height: auto;
+            margin: 10px
+        }
+
+        .contacts {
+            /* display: flex; */
+            justify-content:center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 700px;
+            height: auto;
+            margin: 10px
+        }
+
+    </style>
 </head>
 <body>
-  <!-- Слайд-шоу -->
-  <div id="img_container">
-  </div>
+    <div id="app">
+        <!-- Навигационное меню -->
+        <nav>
+            <button :disabled="!isSlideshowStarted" @click="showImages">Слайд-шоу</button>
+            <button :disabled="!isSlideshowStarted" @click="showAbout">О проекте</button>
+            <button :disabled="!isSlideshowStarted" @click="showContact">Контакты</button>
+            <button :disabled="!isSlideshowStarted" @click="showSuggestions">Предложения</button>
+        </nav>
+        <!-- Слайд-шоу --> 
+        <div id="img_container" v-show="showSlideshow"> 
+            <img v-for="url in urls" :src="url" alt="slideshow" v-show="currentImageIndex === urls.indexOf(url)"> 
+        </div>
+
+        <!-- Кнопки управления слайдами -->
+        <div class="slider-controls">
+            <button class="slider-btn prev-btn" @click="prevImage"></button>
+            <button class="slider-btn next-btn" @click="nextImage"></button>
+            <button class="slider-btn toggle-btn" @click="toggleSlideshow">{{ isSlideshowStarted ? '||' : '►' }}</button>
+        </div>
+        <!-- О проекте -->
+        <div id="about" v-show="showAboutSection"> 
+            <div class = "description">
+                <h2 style="color: white">О Проекте Cinememory </h2> 
+                <p id="info">  
+                    Добро пожаловать на Cinememory, уникальный сайт, посвященный сохранению и переживанию любимых киновоспоминаний!
+                    Наша платформа является убежищем для ностальгирующих любителей кино, которые желают вновь пережить волшебство кинематографа через запоминающиеся сцены и незабываемые моменты.<br><br>
+                    
+                    На Cinememory мы представляем захватывающий слайдер с иконными кадрами из различных фильмов, созданный для того, чтобы вызвать любимые воспоминания и вдохновить на беседы среди нашего сообщества.
+                    Делитесь личными историями, любимыми цитатами и размышлениями о фильмах, которые коснулись вашей жизни.<br><br>
+                    
+                    Присоединяйтесь к семье Cinememory сегодня и погрузитесь в трогательное путешествие по переулку памяти, празднуя вечный вклад кино в нашу жизнь.
+                    Наша коллекция не полна, поэтому мы предлагаем писать ваши предложения о добавлении нового культового киновоспоминания во вкладке "Предложения".
+                </p>
+            </div>
+        </div>
+
+        <!-- Контакты -->
+        <div id="contact" v-show="showContactSection">
+            <div class="contacts">
+                <h2 style="color: white;">Контактная информация Матвей</h2>            
+                <p id="info">Email: clounadaprodolzhaetsa@gmail.com</p>
+                <p id="info">github: https://github.com/dzhovsdelkunevhodil</p>
+                <p id="info">Телефон: +7-9**-***-30-47</p>
+                <p>------------------------------------------------------------</p>
+                <h2 style="color: white;">Контактная информация Всеволод</h2>           
+                <p id="info">Email: jhonykattvil@gmail.com</p>
+                <p id="info">github: https://github.com/Vsevomes</p>
+                <p id="info">Телефон: +7-9**-***-24-04</p>
+            </div>
+        </div>
+
+        <!-- Форма -->
+        <div id="suggestions" v-show="showSuggestionsSection">
+
+
+            <h2 class="form-title" style="color: white;">Предложения для фильмов</h2>
+
+          <form @submit.prevent="submitForm" class="custom-form">
+            <div class="form-group">
+              <label for="middleName" class="required">ФИО:</label>
+            <input type="text" class="form-control" id="middleName" v-model="middleName" required>
+            </div>
+            <div class="form-group">
+              <label for="birthYear" class="required">Год рождения:</label>
+              <input type="date" class="form-control" id="birthYear" v-model="birthYear" required>
+            </div>
+            <div class="form-group">
+              <label for="movieSuggestion" class="required">Предложенный фильм:</label>
+              <input type="text" class="form-control" id="movieSuggestion" v-model="movieSuggestion" required>
+            </div>
+            <div class="form-group">
+              <label for="comments">Комментарии:</label>
+              <textarea class="form-control" id="comments" rows="1" v-model="comments"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Отправить</button>
+          </form>
+          <p class = "required-info"><span class ="required"></span> - обязательное поле</p>
+
+          <p></p>
+        
+        </div>
+      
+
+        <button id="button_id" @click="startSlideshow"><span>Воспроизведение воспоминаний</span></button>
  
-  <button id="button_id">Воспроизведение воспоминаний</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="Slide-Show_script.js"></script>
 </body>
 </html>
